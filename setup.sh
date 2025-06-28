@@ -178,6 +178,7 @@ sh install.sh --unattended
 git clone https://github.com/zsh-users/zsh-syntax-highlighting ;
 git clone https://github.com/zsh-users/zsh-completions ;
 git clone https://github.com/zsh-users/zsh-autosuggestions ;
+git clone https://github.com/zsh-users/zsh-history-substring-search
 
 # Moove plug-in into zsh dir
 mv zsh* ~/.oh-my-zsh/plugins;
@@ -206,7 +207,7 @@ EOF
 
 
 # Write plug-in into .zshrc and change theme
-sed -i "s/plugins=(git)/plugins=(git zsh-autosuggestions zsh-syntax-highlighting zsh-completions)/g" .zshrc ;
+sed -i "s/plugins=(git)/plugins=(git zsh-autosuggestions zsh-syntax-highlighting zsh-completions fzf)/g" .zshrc ;
 sed -i 's/ZSH_THEME="robbyrussell"/ZSH_THEME="chibraax"/g' .zshrc ;
 
 # Config .zshrc
