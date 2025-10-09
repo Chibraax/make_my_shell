@@ -1,217 +1,160 @@
 #!/bin/bash
 
-# Check OS
-
-# Red HAT
-
-if [[ -d "/etc/dnf" ]] && [[ -f "/usr/bin/dnf" ]]; then
-        USER_DISTRO="RED_HAT"
+# Check sudo
+if [[ ! -f "/usr/bin/sudo" ]]; then
+  echo "[-] Sudo not installed !"
+  echo "Log as root and install it !"
+  exit 1
 fi
 
-cat /etc/os-release | grep -i "redhat" > /dev/null;
-
-if [[ "$?" -eq 0 ]];then
-	USER_DISTRO="RED_HAT";
+# RED_HAT
+if [[ -f "/usr/bin/dnf" || -f "/usr/bin/yum" ]]; then
+  USER_DISTRO="RED_HAT"
+fi
+cat /etc/os-release | grep -i "redhat" >/dev/null
+if [[ "$?" -eq 0 ]]; then
+  echo "[+] RedHat like OS"
+  USER_DISTRO="RED_HAT"
 fi
 
 # Debian
-
-if [[ -d "/etc/apt" ]] && [[ -f "/usr/bin/apt" ]]; then
-        USER_DISTRO="Debian"
+if [[ -f "/usr/bin/apt" ]]; then
+  USER_DISTRO="DEBIAN"
 fi
-
-cat /etc/os-release | grep -i "debian" > /dev/null;
-
-if [[ "$?" -eq 0 ]];then
-	USER_DISTRO="Debian";
+cat /etc/os-release | grep -i "debian" >/dev/null
+if [[ "$?" -eq 0 ]]; then
+  echo "[+] Debian like OS"
+  USER_DISTRO="DEBIAN"
 fi
 
 # Arch
-
 if [[ -f "/usr/bin/pacman" ]]; then
-        USER_DISTRO="Arch"
+  USER_DISTRO="Arch"
+fi
+cat /etc/os-release | grep -i "arch" >/dev/null
+if [[ "$?" -eq 0 ]]; then
+  echo "[+] Arch like OS"
+  USER_DISTRO="Arch"
 fi
 
-cat /etc/os-release | grep -i "arch" > /dev/null;
-
-if [[ "$?" -eq 0 ]];then
-        USER_DISTRO="Arch";
-fi
+PACKAGES=("git curl zsh wget fzf")
 
 case "$USER_DISTRO" in
 
+DEBIAN)
+  echo "[+] Check Packages ..."
+  for package in ${PACKAGES[@]}; do
+    apt show $package 2>/dev/null | grep -i "APT-Manual-Installed: yes" >/dev/null
+
+    if [[ $? -eq "0" ]]; then
+      echo "[+] $package installed"
+    else
+      echo "[-] $package not installed"
+      echo "Install it ..."
+      sudo apt-get install $package -y 2>/dev/null
+    fi
+  done
+
+  ;;
 RED_HAT)
-	echo "Distro Based on RED_HAT";
+  echo "[+] Check Packages ..."
+  for package in ${PACKAGES[@]}; do
+    rpm --query $package >/dev/null
 
+    if [[ $? -eq "0" ]]; then
+      echo "[+] $package installed"
+    else
+      echo "[-] "$package" not installed\n Install it ..."
+      sudo dnf install "$package" -y
+    fi
+  done
 
-        #Verif git
-        rpm --query git > /dev/null;
-
-        if [[ "$?" -eq 0 ]]
-        then
-                echo "Git installed"
-        else
-                echo "Git not installed"
-                sudo dnf install git -y
-        fi
-
-
-        #Verif ZSH
-        rpm --query zsh > /dev/null;
-
-        if [[ "$?" -eq 0 ]]
-        then
-                echo "Zsh installed"
-        else
-                echo "Zsh not installed"
-                sudo dnf install zsh -y
-        fi
-
-        #Verif Curl
-        rpm --query curl > /dev/null ;
-
-        if [[ "$?" -eq 0 ]]
-        then
-                echo "Curl installed"
-        else
-                echo "Curl not installed"
-                sudo dnf install curl -y
-        fi
-
-;;
-Debian)
-	echo "Distro Based on Debian";
- 
-        #Verif git
-        apt show git 2> /dev/null | grep -i "APT-Manual-Installed: yes" > /dev/null
-
-        if [[ "$?" -eq 0 ]]
-        then
-                echo "Git installed"
-        else
-                echo "Git not installed"
-                sudo apt install git -y
-        fi
-
-
-        #Verif ZSH
-        apt show zsh 2> /dev/null | grep -i "APT-Manual-Installed: yes" > /dev/null
-        if [[ "$?" -eq 0 ]]
-        then
-                echo "Zsh installed"
-        else
-                echo "Zsh not installed"
-                sudo apt install zsh -y
-        fi
-
-        #Verif Curl
-        apt show curl 2> /dev/null | grep -i "APT-Manual-Installed: yes" > /dev/null
-        if [[ "$?" -eq 0 ]]
-        then
-                echo "Curl installed"
-        else
-                echo "Curl not installed"
-                sudo apt install curl -y
-        fi
-
-        #Verif wget
-        apt show wget 2> /dev/null | grep -i "APT-Manual-Installed: yes" > /dev/null
-        if [[ "$?" -eq 0 ]]
-        then
-                echo "Wget installed"
-        else
-                echo "Wget not installed"
-                sudo apt install wget -y
-        fi
-
-
-;;
+  ;;
 Arch)
-	echo "Distro Based on Arch";
+  echo "[+] Check Packages ..."
+  for package in ${PACKAGES[@]}; do
+    pacman -Q $package >/dev/null
 
-        # Verif git
-        pacman -Q git > /dev/null
+    if [[ $? -eq "0" ]]; then
+      echo "[+] $package installed"
+    else
+      echo "[-] "$package" not installed\n Install it ..."
+      sudo pacman -Syu $package
 
-        if [[ "$?" -eq 0 ]]
-        then
-                echo "Git installed"
-        else
-                echo "Git not installed"
-                sudo pacman -Syu git ;
-        fi
-
-        # Verif ZSH
-        pacman -Q zsh > /dev/null
-
-        if [[ "$?" -eq 0 ]]
-        then
-                echo "Zsh installed"
-        else
-                echo "Zsh not installed"
-                sudo pacman -Syu zsh;
-        fi
-
-        #Verif Curl
-        pacman -Q curl > /dev/null
-
-        if [[ "$?" -eq 0 ]]
-        then
-                echo "Curl installed"
-        else
-                echo "Curl not installed"
-                sudo pacman -Syu zsh;
-        fi
-	
+    fi
+  done
+  ;;
 esac
-
 
 # Change shell
 echo "Changing default shell"
-chsh -s /usr/bin/zsh ;
+chsh -s /usr/bin/zsh
 
 # Install OhMyZsh
-cd  ~;
-curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh > install.sh && chmod +x install.sh
+cd ~
+curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh >install.sh && chmod +x install.sh
 sh install.sh --unattended
 
 # Install Plug-in
-git clone https://github.com/zsh-users/zsh-syntax-highlighting ;
-git clone https://github.com/zsh-users/zsh-completions ;
-git clone https://github.com/zsh-users/zsh-autosuggestions ;
+git clone https://github.com/zsh-users/zsh-syntax-highlighting
+git clone https://github.com/zsh-users/zsh-completions
+git clone https://github.com/zsh-users/zsh-autosuggestions
 git clone https://github.com/zsh-users/zsh-history-substring-search
 
 # Moove plug-in into zsh dir
-mv zsh* ~/.oh-my-zsh/plugins;
-# Second directory
-cat <<EOF >> ~/.oh-my-zsh/themes/chibraax2.zsh-theme
-# user, host, full path, and time/date
-# on two lines for easier vgrepping
-# entry in a nice long thread on the Arch Linux forums: https://bbs.archlinux.org/viewtopic.php?pid=521888#p521888
-PROMPT=$'%{\e[0;34m%}%B┌─[%b%{\e[0m%}%{\e[1;31m%}%n%{\e[1;34m%}🎃​%{\e[0m%}%{\e[0;36m%}%m%{\e[0;34m%}%B]%b%{\e[0m%}🩸​🩸%b%{\e[0;34m%}%B[%b%{\e[1;37m%}%~%{\e[0;34m%}%B]%b%{\e[0m%}🩸​🩸%{\e[0;34m%}%B[%b%{\e[0;33m%}%!%{\e[0;34m%}%B]%b%{\e[0m%}
-%{\e[0;34m%}%B└─%B[%{\e[1;35m%}$%{\e[0;34m%}%B]%{\e[0m%}%b '
-RPROMPT='[%*]'
-PS2=$' \e[0;34m%}%B>%{\e[0m%}%b '
-EOF
+mv zsh* ~/.oh-my-zsh/plugins
+clear
+while true; do
+  if [[ ! -z "$USER" && ! -z "$HOSTNAME" ]]; then
+    echo "1: ┌─[$USER💀$HOSTNAME]⚡⚡[/some/random/path]⚡⚡[0000]
+     └─[$]"
+    echo "2: ┌─[$USER🎃$HOSTNAME]🩸🩸[/some/random/path]🩸🩸[0000]
+     └─[$]"
+  else
+    echo "1: ┌─[user💀hostname]⚡⚡[/some/random/path]⚡⚡[0000]
+   └─[$]"
+    echo "2: ┌─[user🎃hostname]🩸🩸[/some/random/path]🩸🩸[0000]
+   └─[$]"
+  fi
 
-
-# Copy personnal theme into dir
-cat <<EOF >> ~/.oh-my-zsh/themes/chibraax.zsh-theme
+  read -p "What prompt do you prefer 1 or 2 ? " choice
+  if [[ $choice -eq "1" ]] || [[ $choice -eq "2" ]]; then
+    if [[ $choice -eq "1" ]]; then
+      sed -i 's/ZSH_THEME="[^"]*"/ZSH_THEME="chibraax"/g' .zshrc
+      # Copy personnal theme into dir
+      cat <<EOF >>~/.oh-my-zsh/themes/chibraax.zsh-theme
 # user, host, full path, and time/date
 # on two lines for easier vgrepping
 # entry in a nice long thread on the Arch Linux forums: https://bbs.archlinux.org/viewtopic.php?pid=521888#p521888
 PROMPT=$'%{\e[0;34m%}%B┌─[%b%{\e[0m%}%{\e[1;31m%}%n%{\e[1;34m%}💀%{\e[0m%}%{\e[0;36m%}%m%{\e[0;34m%}%B]%b%{\e[0m%}⚡⚡%b%{\e[0;34m%}%B[%b%{\e[1;37m%}%~%{\e[0;34m%}%B]%b%{\e[0m%}⚡⚡%{\e[0;34m%}%B[%b%{\e[0;33m%}%!%{\e[0;34m%}%B]%b%{\e[0m%}
+%{\e[0;34m%}%B└─%B[%{\e[1;35m%}$%{\e[0;34m%}%B]%{\e[0m%}%b'
+RPROMPT='[%*]'
+PS2=$' \e[0;34m%}%B>%{\e[0m%}%b '
+EOF
+      echo "[+] Theme added to ~/.zshrc"
+      echo "[+] Theme located in : ~/.oh-my-zsh/themes/chibraax.zsh-theme"
+      break
+    elif [[ "$choice" -eq "2" ]]; then
+      sed -i 's/ZSH_THEME="[^"]*"/ZSH_THEME="chibraax2"/g' .zshrc
+      cat <<EOF >>~/.oh-my-zsh/themes/chibraax2.zsh-theme
+# user, host, full path, and time/date
+# on two lines for easier vgrepping
+# entry in a nice long thread on the Arch Linux forums: https://bbs.archlinux.org/viewtopic.php?pid=521888#p521888
+PROMPT=$'%{\e[0;34m%}%B┌─[%b%{\e[0m%}%{\e[1;31m%}%n%{\e[1;34m%}🎃%{\e[0m%}%{\e[0;36m%}%m%{\e[0;34m%}%B]%b%{\e[0m%}🩸🩸%b%{\e[0;34m%}%B[%b%{\e[1;37m%}%~%{\e[0;34m%}%B]%b%{\e[0m%}🩸🩸%{\e[0;34m%}%B[%b%{\e[0;33m%}%!%{\e[0;34m%}%B]%b%{\e[0m%}
 %{\e[0;34m%}%B└─%B[%{\e[1;35m%}$%{\e[0;34m%}%B]%{\e[0m%}%b '
 RPROMPT='[%*]'
 PS2=$' \e[0;34m%}%B>%{\e[0m%}%b '
 EOF
-
-
-# Write plug-in into .zshrc and change theme
-sed -i "s/plugins=(git)/plugins=(git zsh-autosuggestions zsh-syntax-highlighting zsh-completions fzf)/g" .zshrc ;
-sed -i 's/ZSH_THEME="robbyrussell"/ZSH_THEME="chibraax"/g' .zshrc ;
-
-# Config .zshrc
-rm install.sh
+      echo "[+] Theme added to ~/.zshrc"
+      echo "[+] Theme located in : ~/.oh-my-zsh/themes/chibraax2.zsh-theme"
+      break
+    else
+      echo "Bad choice"
+      echo ""
+      continue
+    fi
+  fi
+done
 
 exec zsh -l && source .zshrc
-exit 0;
+exit 0
