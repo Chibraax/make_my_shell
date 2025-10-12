@@ -1,21 +1,11 @@
 # auto_zsh_installer
-Bash script to install and configure zsh shell and oh_my_zsh plugins.
-You need will need `sudo`.
+This script install and configure zsh shell and oh_my_zsh plugins, plus other stuff like `lsd` in order to have a nice and enjoyable prompt and shell experience.
 
-Works on Debian like | Arch like | Red hat like.
+[*] Make sure to have `sudo`.
 
-# Oh-my-zsh Plugins : 
-
-  +> zsh-syntax-highlighting 
-  
-  +> zsh-completions 
-  
-  +> zsh-autosuggestions
-
+Works on `Debian` like | `Arch` like | `RedHat` like.
 
 # How to install ? 
-
-```cd ~```
 
 ```git clone https://github.com/Chibraax/auto_zsh```
 
@@ -24,7 +14,6 @@ Works on Debian like | Arch like | Red hat like.
 ```chmod +x setup.sh```
 
 ```./setup.sh```
-
 
 # Before :
 
