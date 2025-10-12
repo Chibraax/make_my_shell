@@ -1,5 +1,5 @@
 # auto_zsh_installer
-This script install and configure zsh shell and oh_my_zsh plugins, plus other stuff like `lsd` in order to have a nice and enjoyable prompte and shell experience.
+This script install and configure zsh shell and oh_my_zsh plugins, plus other stuff like `lsd` in order to have a nice and enjoyable prompt and shell experience.
 
 [*] Make sure to have `sudo`.
 
