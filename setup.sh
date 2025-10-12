@@ -4,46 +4,24 @@
 GREEN="\033[0;32m"
 RED="\033[0;33m"
 RESET="\033[0;0m"
-
+#
 # Check sudo
-if [[ ! -f "/usr/bin/sudo" ]]; then
-  echo -e "["$RED"-"$RESET"] Sudo not installed !"
-  echo -e "Log as root and install it !"
-  exit 1
-fi
+test -f "/usr/bin/sudo" || eval " echo -e "[-] sudo not installed ! log as root and install it !" && exit 1"
 
 # RED_HAT
-if [[ -f "/usr/bin/dnf" || -f "/usr/bin/yum" ]]; then
-  USER_DISTRO="RED_HAT"
-fi
-cat /etc/os-release | grep -i "redhat" >/dev/null
-if [[ "$?" -eq 0 ]]; then
-  echo -e "["$GREEN"+"$RESET"] RedHat like OS\n"
-  USER_DISTRO="RED_HAT"
-fi
+test -f "/usr/bin/dnf" || test -f "/usr/bin/yum" && USER_DISTRO=RED_HAT
+grep -iq "redhat" /etc/os-release && echo -e "["$GREEN"+"$RESET"] RedHat like OS\n"
+USER_DISTRO="RED_HAT"
 
 # Debian
-if [[ -f "/usr/bin/apt" ]]; then
-  USER_DISTRO="DEBIAN"
-fi
-cat /etc/os-release | grep -i "debian" >/dev/null
-if [[ "$?" -eq 0 ]]; then
-  echo -e "["$GREEN"+"$RESET"] Debian like OS\n"
-  USER_DISTRO="DEBIAN"
-fi
+test -f "/usr/bin/dnf" || test -f "/usr/bin/apt-get" && USER_DISTRO=DEBIAN
+grep -iq "debian" /etc/os-release && echo -e "["$GREEN"+"$RESET"] Debian like OS\n" && USER_DISTRO="DEBIAN"
 
 # Arch
-if [[ -f "/usr/bin/pacman" ]]; then
-  USER_DISTRO="Arch"
-fi
-cat /etc/os-release | grep -i "arch" >/dev/null
-if [[ "$?" -eq 0 ]]; then
-  echo -e "["$GREEN"+"$RESET"] Arch like OS\n"
-  USER_DISTRO="Arch"
-fi
+test -f "/usr/bin/pacman" && USER_DISTRO=Arch
+grep -iq "arch" /etc/os-release && echo -e "["$GREEN"+"$RESET"] Arch like OS\n" && USER_DISTRO="Arch"
 
 PACKAGES=("git curl zsh wget fzf lsd bat")
-
 case "$USER_DISTRO" in
 
 DEBIAN)
@@ -62,29 +40,29 @@ DEBIAN)
 
   ;;
 RED_HAT)
-  echo -e "[+] Check Packages ..."
+  echo -e "[$GREEN+$RESET] Check Packages ..."
   for package in ${PACKAGES[@]}; do
     rpm --query $package >/dev/null
 
     if [[ $? -eq "0" ]]; then
-      echo -e "[+] $package installed"
+      echo -e "[$GREEN+$RESET] $package installed"
     else
-      echo -e "[-] "$package" not installed\n Install it ..."
+      echo -e "[$RED-$RESET] "$package" not installed\n Install it ..."
       sudo dnf install "$package" -y
     fi
   done
 
   ;;
 Arch)
-  echo -e "[+] Check Packages ..."
+  echo -e "["$GREEN"+"$RESET"] Check Packages ..."
   for package in ${PACKAGES[@]}; do
     pacman -Q $package >/dev/null
 
     if [[ $? -eq "0" ]]; then
-      echo -e "[+] $package installed"
+      echo -e "["$GREEN"+"$RESET"] $package installed"
     else
-      echo -e "[-] "$package" not installed"
-      echo -e "[+] Try to install "$package""
+      echo -e "[$RED-$RESET] "$package" not installed"
+      echo -e "[$GREEN+$RESET] Try to install "$package""
       sudo pacman -Syu "$package"
 
     fi
