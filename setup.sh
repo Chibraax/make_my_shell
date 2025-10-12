@@ -1,7 +1,6 @@
 #!/bin/bash
 
 # Color variables
-
 GREEN="\033[0;32m"
 RED="\033[0;33m"
 RESET="\033[0;0m"
@@ -43,7 +42,7 @@ if [[ "$?" -eq 0 ]]; then
   USER_DISTRO="Arch"
 fi
 
-PACKAGES=("git curl zsh wget fzf lsd")
+PACKAGES=("git curl zsh wget fzf lsd bat")
 
 case "$USER_DISTRO" in
 
@@ -126,6 +125,7 @@ while true; do
   fi
 
   read -p "What prompt do you prefer 1 or 2 ? " choice
+  echo -e "\n"
   if [[ $choice -eq "1" ]] || [[ $choice -eq "2" ]]; then
     if [[ $choice -eq "1" ]]; then
       sed -i 's/ZSH_THEME="[^"]*"/ZSH_THEME="chibraax"/g' .zshrc
@@ -164,9 +164,19 @@ EOF
   fi
 done
 
-# Alias for LSD
+# .zshrc for plugins
+sed -i "s/plugins=(git)/plugins=(git zsh-autosuggestions zsh-syntax-highlighting zsh-completions zsh-history-substring-search)/g" .zshrc
+
+# Alias for LSD,BATCAT
 echo -e "# Custom alias made by script" >>~/.zshrc
 echo -e "alias ls=/usr/bin/lsd" >>~/.zshrc
+echo -e "alias cat=/usr/bin/batcat" >>~/.zshrc
+
+# Warn the user
 echo -e "\n["$RED"*"$RESET"] NB: Now your 'ls' command will execute LSD, if you want change this uncomment the alias inside your .zshrc"
+echo -e "["$RED"*"$RESET"] NB: Now your 'cat' command will execute BATCAT, if you want change this uncomment the alias inside your .zshrc"
+
+# Execute the ZSH shell
+rm ~/install.sh
 exec zsh -l && source .zshrc
 exit 0
