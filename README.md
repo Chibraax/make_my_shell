@@ -17,8 +17,8 @@ Works on `Debian` like | `Arch` like | `RedHat` like.
 
 # Before :
 
- <img src="images/before.png" alt="before auto_zsh script "> 
+ <img src="images/1.png" alt="before auto_zsh script "> 
 
 # After : 
 
- <img src="images/after2.png" alt="after auto_zsh script "> 
+ <img src="images/2.png" alt="after auto_zsh script "> 
