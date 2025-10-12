@@ -15,7 +15,7 @@ Works on `Debian` like | `Arch` like | `RedHat` like.
 
 ```./setup.sh```
 
-# Before :
+# Before (classic BASH):
 
  <img src="images/1.png" alt="before auto_zsh script "> 
 
