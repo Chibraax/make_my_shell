@@ -22,3 +22,8 @@ Works on `Debian` like | `Arch` like | `RedHat` like.
 # After : 
 
  <img src="images/2.png" alt="after auto_zsh script "> 
+
+ # Features :
+
+ `fzf`: By pressing Ctrl + r, you can search through your command history.
+ ``
