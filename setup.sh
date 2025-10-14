@@ -79,12 +79,12 @@ cd ~
 curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh >install.sh && chmod +x install.sh
 sh install.sh --unattended >/dev/null
 
-# Install Plug-in
-echo -e "["$GREEN"+"$RESET"] Install all oh-my-zsh plugins .."
-git clone --quiet https://github.com/zsh-users/zsh-syntax-highlighting && echo -e "["$GREEN"+"$RESET"] zsh-syntax-highlighting installed"
-git clone --quiet https://github.com/zsh-users/zsh-completions && echo -e "["$GREEN"+"$RESET"] zsh-completions installed"
-git clone --quiet https://github.com/zsh-users/zsh-autosuggestions && echo -e "["$GREEN"+"$RESET"] zsh-autosuggestions installed"
-git clone --quiet https://github.com/zsh-users/zsh-history-substring-search && echo -e "["$GREEN"+"$RESET"] zsh-history-substring-search installed"
+# Install Plugins
+echo -e "["$GREEN"+"$RESET"] Install all oh-my-zsh plugins ..\n"
+ALL_PLUGINS=(zsh-completions zsh-history-substring-search zsh-syntax-highlighting zsh-autosuggestions)
+for plugin in ${ALL_PLUGINS[@]}; do
+  test -d "$HOME/.oh-my-zsh/plugins/$plugin" || git clone --quiet https://github.com/zsh-users/zsh-syntax-highlighting >/dev/null && echo -e "["$GREEN"+"$RESET"] $plugin installed"
+done
 
 # Moove plug-in into zsh dir
 mv zsh* ~/.oh-my-zsh/plugins
@@ -117,8 +117,8 @@ PROMPT=$'%{\e[0;34m%}%B┌─[%b%{\e[0m%}%{\e[1;31m%}%n%{\e[1;34m%}💀%{\e[0m%}
 RPROMPT='[%*]'
 PS2=$' \e[0;34m%}%B>%{\e[0m%}%b '
 EOF
-      echo -e "[+] Theme added to ~/.zshrc"
-      echo -e "[+] Theme located in : ~/.oh-my-zsh/themes/chibraax.zsh-theme"
+      echo -e "[$GREEN+$RESET] Theme added to ~/.zshrc"
+      echo -e "[$GREEN+$RESET] Theme located in : ~/.oh-my-zsh/themes/chibraax.zsh-theme"
       break
     elif [[ "$choice" -eq "2" ]]; then
       sed -i 's/ZSH_THEME="[^"]*"/ZSH_THEME="chibraax2"/g' .zshrc
