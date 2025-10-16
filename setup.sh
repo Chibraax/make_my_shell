@@ -83,12 +83,18 @@ sh install.sh --unattended >/dev/null
 echo -e "["$GREEN"+"$RESET"] Install all oh-my-zsh plugins ..\n"
 ALL_PLUGINS=(zsh-completions zsh-history-substring-search zsh-syntax-highlighting zsh-autosuggestions)
 for plugin in ${ALL_PLUGINS[@]}; do
-  test -d "$HOME/.oh-my-zsh/plugins/$plugin" || git clone --quiet https://github.com/zsh-users/zsh-syntax-highlighting >/dev/null && echo -e "["$GREEN"+"$RESET"] $plugin installed"
+  if [[ ! -d "$HOME/.oh-my-zsh/plugins/$plugin" ]]; then
+    echo -e "[$RED-$RESET]$plugin not installed, install it ..."
+    mkdir $HOME/.oh-my-zsh/plugins/$plugin
+    git clone --quiet https://github.com/zsh-users/$plugin $HOME/.oh-my-zsh/plugins/$plugin && echo -e "["$GREEN"+"$RESET"] $plugin installed\n"
+  else
+    echo -e "[$GREEN+$RESET]$plugin already installed.\n"
+    continue
+  fi
 done
 
 # Moove plug-in into zsh dir
-mv zsh* ~/.oh-my-zsh/plugins
-echo -e "\n"
+echo -e "\n\n"
 while true; do
   if [[ ! -z "$USER" && ! -z "$HOSTNAME" ]]; then
     echo -e "1: ┌─[$USER💀$HOSTNAME]⚡⚡[/some/random/path]⚡⚡[0000]
@@ -152,7 +158,7 @@ echo -e "alias cat=/usr/bin/batcat" >>~/.zshrc
 
 # Warn the user
 echo -e "\n["$RED"*"$RESET"] NB: Now your 'ls' command will execute LSD, if you want change this uncomment the alias inside your .zshrc"
-echo -e "["$RED"*"$RESET"] NB: Now your 'cat' command will execute BATCAT, if you want change this uncomment the alias inside your .zshrc"
+echo -e "["$RED"*"$RESET"] NB: Now your 'cat' command will execute BATCAT, if you want change this uncomment the alias inside your .zshrc\n"
 
 # Execute the ZSH shell
 rm ~/install.sh
