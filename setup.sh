@@ -4,7 +4,32 @@
 GREEN="\033[0;32m"
 RED="\033[0;33m"
 RESET="\033[0;0m"
-#
+
+# All themes
+function prompt1() {
+  cat <<EOF >>~/.oh-my-zsh/themes/chibraax.zsh-theme
+# user, host, full path, and time/date
+# on two lines for easier vgrepping
+# entry in a nice long thread on the Arch Linux forums: https://bbs.archlinux.org/viewtopic.php?pid=521888#p521888
+PROMPT=$'%{\e[0;34m%}%B┌─[%b%{\e[0m%}%{\e[1;31m%}%n%{\e[1;34m%}💀%{\e[0m%}%{\e[0;36m%}%m%{\e[0;34m%}%B]%b%{\e[0m%}⚡⚡%b%{\e[0;34m%}%B[%b%{\e[1;37m%}%~%{\e[0;34m%}%B]%b%{\e[0m%}⚡⚡%{\e[0;34m%}%B[%b%{\e[0;33m%}%!%{\e[0;34m%}%B]%b%{\e[0m%}
+%{\e[0;34m%}%B└─%B[%{\e[1;35m%}$%{\e[0;34m%}%B]%{\e[0m%}%b '
+RPROMPT='[%*]'
+PS2=$' \e[0;34m%}%B>%{\e[0m%}%b '
+EOF
+}
+
+function prompt2() {
+  cat <<EOF >>~/.oh-my-zsh/themes/chibraax2.zsh-theme
+# user, host, full path, and time/date
+# on two lines for easier vgrepping
+# entry in a nice long thread on the Arch Linux forums: https://bbs.archlinux.org/viewtopic.php?pid=521888#p521888
+PROMPT=$'%{\e[0;34m%}%B┌─[%b%{\e[0m%}%{\e[1;31m%}%n%{\e[1;34m%}🎃%{\e[0m%}%{\e[0;36m%}%m%{\e[0;34m%}%B]%b%{\e[0m%}🩸🩸%b%{\e[0;34m%}%B[%b%{\e[1;37m%}%~%{\e[0;34m%}%B]%b%{\e[0m%}🩸🩸%{\e[0;34m%}%B[%b%{\e[0;33m%}%!%{\e[0;34m%}%B]%b%{\e[0m%}
+%{\e[0;34m%}%B└─%B[%{\e[1;35m%}$%{\e[0;34m%}%B]%{\e[0m%}%b '
+RPROMPT='[%*]'
+PS2=$' \e[0;34m%}%B>%{\e[0m%}%b '
+EOF
+}
+
 # Check sudo
 test -f "/usr/bin/sudo" || eval " echo -e "[-] sudo not installed ! log as root and install it !" && exit 1"
 
@@ -81,7 +106,7 @@ sh install.sh --unattended >/dev/null
 
 # Install Plugins
 echo -e "["$GREEN"+"$RESET"] Install all oh-my-zsh plugins ..\n"
-ALL_PLUGINS=(zsh-completions zsh-history-substring-search zsh-syntax-highlighting zsh-autosuggestions)
+ALL_PLUGINS=(zsh-completions zsh-syntax-highlighting zsh-autosuggestions)
 for plugin in ${ALL_PLUGINS[@]}; do
   if [[ ! -d "$HOME/.oh-my-zsh/plugins/$plugin" ]]; then
     echo -e "[$RED-$RESET]$plugin not installed, install it ..."
@@ -113,30 +138,13 @@ while true; do
   if [[ $choice -eq "1" ]] || [[ $choice -eq "2" ]]; then
     if [[ $choice -eq "1" ]]; then
       sed -i 's/ZSH_THEME="[^"]*"/ZSH_THEME="chibraax"/g' .zshrc
-      # Copy personnal theme into dir
-      cat <<EOF >>~/.oh-my-zsh/themes/chibraax.zsh-theme
-# user, host, full path, and time/date
-# on two lines for easier vgrepping
-# entry in a nice long thread on the Arch Linux forums: https://bbs.archlinux.org/viewtopic.php?pid=521888#p521888
-PROMPT=$'%{\e[0;34m%}%B┌─[%b%{\e[0m%}%{\e[1;31m%}%n%{\e[1;34m%}💀%{\e[0m%}%{\e[0;36m%}%m%{\e[0;34m%}%B]%b%{\e[0m%}⚡⚡%b%{\e[0;34m%}%B[%b%{\e[1;37m%}%~%{\e[0;34m%}%B]%b%{\e[0m%}⚡⚡%{\e[0;34m%}%B[%b%{\e[0;33m%}%!%{\e[0;34m%}%B]%b%{\e[0m%}
-%{\e[0;34m%}%B└─%B[%{\e[1;35m%}$%{\e[0;34m%}%B]%{\e[0m%}%b '
-RPROMPT='[%*]'
-PS2=$' \e[0;34m%}%B>%{\e[0m%}%b '
-EOF
+      prompt1
       echo -e "[$GREEN+$RESET] Theme added to ~/.zshrc"
       echo -e "[$GREEN+$RESET] Theme located in : ~/.oh-my-zsh/themes/chibraax.zsh-theme"
       break
     elif [[ "$choice" -eq "2" ]]; then
       sed -i 's/ZSH_THEME="[^"]*"/ZSH_THEME="chibraax2"/g' .zshrc
-      cat <<EOF >>~/.oh-my-zsh/themes/chibraax2.zsh-theme
-# user, host, full path, and time/date
-# on two lines for easier vgrepping
-# entry in a nice long thread on the Arch Linux forums: https://bbs.archlinux.org/viewtopic.php?pid=521888#p521888
-PROMPT=$'%{\e[0;34m%}%B┌─[%b%{\e[0m%}%{\e[1;31m%}%n%{\e[1;34m%}🎃%{\e[0m%}%{\e[0;36m%}%m%{\e[0;34m%}%B]%b%{\e[0m%}🩸🩸%b%{\e[0;34m%}%B[%b%{\e[1;37m%}%~%{\e[0;34m%}%B]%b%{\e[0m%}🩸🩸%{\e[0;34m%}%B[%b%{\e[0;33m%}%!%{\e[0;34m%}%B]%b%{\e[0m%}
-%{\e[0;34m%}%B└─%B[%{\e[1;35m%}$%{\e[0;34m%}%B]%{\e[0m%}%b '
-RPROMPT='[%*]'
-PS2=$' \e[0;34m%}%B>%{\e[0m%}%b '
-EOF
+      prompt2
       echo -e "["$GREEN"+"$RESET"] Theme added to ~/.zshrc"
       echo -e "["$GREEN"+"$RESET"] Theme located in : ~/.oh-my-zsh/themes/chibraax2.zsh-theme"
       break
@@ -149,7 +157,7 @@ EOF
 done
 
 # .zshrc for plugins
-sed -i "s/plugins=(git)/plugins=(git zsh-autosuggestions zsh-syntax-highlighting zsh-completions zsh-history-substring-search)/g" .zshrc
+sed -i "s/plugins=(git)/plugins=(git zsh-autosuggestions zsh-syntax-highlighting zsh-completions fzf)/g" .zshrc
 
 # Alias for LSD,BATCAT
 echo -e "# Custom alias made by script" >>~/.zshrc
