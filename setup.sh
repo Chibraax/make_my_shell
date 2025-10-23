@@ -72,10 +72,10 @@ esac
 
 # Change shell
 echo -e "["$GREEN"+"$RESET"] Make ZSH default shell"
-chsh -s /usr/bin/zsh
+test -f "/usr/bin/chsh" && chsh -s /usr/bin/zsh ||
 
-# Install OhMyZsh
-cd ~
+  # Install OhMyZsh
+  cd ~
 curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh >install.sh && chmod +x install.sh
 sh install.sh --unattended >/dev/null
 
