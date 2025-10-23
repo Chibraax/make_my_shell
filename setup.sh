@@ -97,10 +97,21 @@ esac
 
 # Change shell
 echo -e "["$GREEN"+"$RESET"] Make ZSH default shell"
-test -f "/usr/bin/chsh" && chsh -s /usr/bin/zsh ||
+if [[ -f "/usr/bin/chsh" ]]; then
+  chsh -s /usr/bin/zsh
+# Do it with sed and grep if CHSH not installed
+elif [[ -f "/usr/bin/sed" ]]
+  LINES_NUMBER=$(grep -n "$USER" /etc/passwd | grep -o "^[[:digit:]]*")
+  OLD_LINE_PASSWD=$(grep "$USER" /etc/passwd)
+  NEW_LINE_PASSWD=$(echo $OLD_LINE_PASSWD | sed "s|$SHELL|/usr/bin/zsh|")
+  sudo sed -i "s|$OLD_LINE_PASSWD|$NEW_LINE_PASSWD|" /etc/passwd
+else
+  echo "[ INFO ] Need CHSH or sed in order to set ZSH as the default shell"
+  echo "skipping ..."
+fi
 
-  # Install OhMyZsh
-  cd ~
+# Install OhMyZsh
+cd ~
 curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh >install.sh && chmod +x install.sh
 sh install.sh --unattended >/dev/null
 
