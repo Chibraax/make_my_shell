@@ -100,7 +100,7 @@ echo -e "["$GREEN"+"$RESET"] Make ZSH default shell"
 if [[ -f "/usr/bin/chsh" ]]; then
   chsh -s /usr/bin/zsh
 # Do it with sed and grep if CHSH not installed
-elif [[ -f "/usr/bin/sed" ]]
+elif [[ -f "/usr/bin/sed" ]]; then
   LINES_NUMBER=$(grep -n "$USER" /etc/passwd | grep -o "^[[:digit:]]*")
   OLD_LINE_PASSWD=$(grep "$USER" /etc/passwd)
   NEW_LINE_PASSWD=$(echo $OLD_LINE_PASSWD | sed "s|$SHELL|/usr/bin/zsh|")
