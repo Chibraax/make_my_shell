@@ -4,6 +4,8 @@
 GREEN="\033[0;32m"
 RED="\033[0;33m"
 RESET="\033[0;0m"
+ALL_PLUGINS=(zsh-completions zsh-syntax-highlighting zsh-autosuggestions)
+PACKAGES=("git curl zsh wget fzf lsd bat")
 
 # All themes
 function prompt1() {
@@ -46,7 +48,6 @@ grep -iq "debian" /etc/os-release && echo -e "["$GREEN"+"$RESET"] Debian like OS
 test -f "/usr/bin/pacman" && USER_DISTRO=Arch
 grep -iq "arch" /etc/os-release && echo -e "["$GREEN"+"$RESET"] Arch like OS\n" && USER_DISTRO="Arch"
 
-PACKAGES=("git curl zsh wget fzf lsd bat")
 case "$USER_DISTRO" in
 
 DEBIAN)
@@ -110,7 +111,6 @@ sh install.sh --unattended >/dev/null
 
 # Install Plugins
 echo -e "["$GREEN"+"$RESET"] Install all oh-my-zsh plugins ..\n"
-ALL_PLUGINS=(zsh-completions zsh-syntax-highlighting zsh-autosuggestions)
 for plugin in ${ALL_PLUGINS[@]}; do
   if [[ ! -d "$HOME/.oh-my-zsh/plugins/$plugin" ]]; then
     echo -e "[$RED-$RESET]$plugin not installed, install it ..."
@@ -165,8 +165,9 @@ sed -i "s/plugins=(git)/plugins=(git zsh-autosuggestions zsh-syntax-highlighting
 
 # Alias for LSD,BATCAT
 echo -e "# Custom alias made by script" >>~/.zshrc
-echo -e "alias ls=/usr/bin/lsd" >>~/.zshrc
-echo -e "alias cat=/usr/bin/batcat" >>~/.zshrc
+test -f "/usr/bin/lsd" && echo -e "alias ls=/usr/bin/lsd" >>~/.zshrc
+test -f "/usr/bin/bat" && echo -e "alias cat=/usr/bin/bat" >>~/.zshrc
+test -f "/usr/bin/batcat" && echo -e "alias cat=/usr/bin/batcat" >>~/.zshrc
 
 # Warn the user
 echo -e "\n["$RED"*"$RESET"] NB: Now your 'ls' command will execute LSD, if you want change this uncomment the alias inside your .zshrc"
