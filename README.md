@@ -32,4 +32,4 @@ Works on `Debian` like | `Arch` like | `RedHat` like.
   
   `zsh-history-substring-search`: This is a clean-room implementation of the Fish shell's history search feature, where you can type in any part of any command from history and then press chosen keys, such as the UP and DOWN arrows, to cycle through matches.
 
-  `lsd`: 
+  `lsd`: exactly like `ls` command but with beautiful syntax colors.
