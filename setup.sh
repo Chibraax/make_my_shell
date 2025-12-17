@@ -177,3 +177,5 @@ echo -e "["$RED"*"$RESET"] NB: Now your 'cat' command will execute BATCAT, if yo
 rm ~/install.sh
 exec zsh -l && source .zshrc
 exit 0
+
+# Add some random comment
