@@ -6,43 +6,7 @@ RED="\033[0;33m"
 RESET="\033[0;0m"
 ALL_PLUGINS=(zsh-completions zsh-syntax-highlighting zsh-autosuggestions)
 PACKAGES=("git curl zsh wget fzf lsd bat")
-
-# All themes
-function prompt1() {
-  cat <<EOF >>~/.oh-my-zsh/themes/chibraax.zsh-theme
-# user, host, full path, and time/date
-# on two lines for easier vgrepping
-# entry in a nice long thread on the Arch Linux forums: https://bbs.archlinux.org/viewtopic.php?pid=521888#p521888
-PROMPT=$'%{\e[0;34m%}%B┌─[%b%{\e[0m%}%{\e[1;31m%}%n%{\e[1;34m%}🎃%{\e[0m%}%{\e[0;36m%}%m%{\e[0;34m%}%B]%b%{\e[0m%}🩸🩸%b%{\e[0;34m%}%B[%b%{\e[1;37m%}%~%{\e[0;34m%}%B]%b%{\e[0m%}🩸🩸%{\e[0;34m%}%B[%b%{\e[0;33m%}%!%{\e[0;34m%}%B]%b%{\e[0m%}
-%{\e[0;34m%}%B└─%B%{\e[0;33m%}$(git_prompt_info)%{\e[1;34m%}%B[\e[0;31m%}$\e[1;34m%}]%{\e[0m%}%b '
-RPROMPT='[%*]'
-PS2=$' \e[0;34m%}%B>%{\e[0m%}%b '
-
-ZSH_THEME_GIT_PROMPT_PREFIX="%{$fg[blue]%}[%{$fg[red]%}"
-ZSH_THEME_GIT_PROMPT_SUFFIX="%{$reset_color%}"
-ZSH_THEME_GIT_PROMPT_DIRTY="%{$fg[blue]%}] %{$fg[yellow]%}%{$reset_color%}"
-ZSH_THEME_GIT_PROMPT_CLEAN="%{$fg[blue]%}]"
-
-EOF
-}
-
-function prompt2() {
-  cat <<EOF >>~/.oh-my-zsh/themes/chibraax2.zsh-theme
-# user, host, full path, and time/date
-# on two lines for easier vgrepping
-# entry in a nice long thread on the Arch Linux forums: https://bbs.archlinux.org/viewtopic.php?pid=521888#p521888
-PROMPT=$'%{\e[0;34m%}%B┌─[%b%{\e[0m%}%{\e[1;31m%}%n%{\e[1;34m%}🎃%{\e[0m%}%{\e[0;36m%}%m%{\e[0;34m%}%B]%b%{\e[0m%}🩸🩸%b%{\e[0;34m%}%B[%b%{\e[1;37m%}%~%{\e[0;34m%}%B]%b%{\e[0m%}🩸🩸%{\e[0;34m%}%B[%b%{\e[0;33m%}%!%{\e[0;34m%}%B]%b%{\e[0m%}
-%{\e[0;34m%}%B└─%B%{\e[0;33m%}$(git_prompt_info)%{\e[1;34m%}%B[\e[0;31m%}$\e[1;34m%}]%{\e[0m%}%b '
-RPROMPT='[%*]'
-PS2=$' \e[0;34m%}%B>%{\e[0m%}%b'
-
-ZSH_THEME_GIT_PROMPT_PREFIX="%{$fg[blue]%}[%{$fg[red]%}"
-ZSH_THEME_GIT_PROMPT_SUFFIX="%{$reset_color%}"
-ZSH_THEME_GIT_PROMPT_DIRTY="%{$fg[blue]%}] %{$fg[yellow]%}⚡ %{$reset_color%}"
-ZSH_THEME_GIT_PROMPT_CLEAN="%{$fg[blue]%}]"
-EOF
-}
-
+SCRIPT_DIR=$(pwd)
 # Check sudo
 test -f "/usr/bin/sudo" || eval " echo -e "[-] sudo not installed ! log as root and install it !" && exit 1"
 
@@ -133,53 +97,22 @@ for plugin in ${ALL_PLUGINS[@]}; do
   fi
 done
 
-# Moove plug-in into zsh dir
-echo -e "\n\n"
-while true; do
-  if [[ ! -z "$USER" && ! -z "$HOSTNAME" ]]; then
-    echo -e "1: ┌─[$USER💀$HOSTNAME]⚡⚡[/some/random/path]⚡⚡[0000]
-     └─[$]"
-    echo -e "2: ┌─[$USER🎃$HOSTNAME]🩸🩸[/some/random/path]🩸🩸[0000]
-     └─[$]"
-  else
-    echo -e "1: ┌─[user💀hostname]⚡⚡[/some/random/path]⚡⚡[0000]
-   └─[$]"
-    echo -e "2: ┌─[user🎃hostname]🩸🩸[/some/random/path]🩸🩸[0000]
-   └─[$]"
-  fi
-
-  read -p "What prompt do you prefer 1 or 2 ? " choice
-  echo -e "\n"
-  if [[ $choice -eq "1" ]] || [[ $choice -eq "2" ]]; then
-    if [[ $choice -eq "1" ]]; then
-      sed -i 's/ZSH_THEME="[^"]*"/ZSH_THEME="chibraax"/g' .zshrc
-      prompt1
-      echo -e "[$GREEN+$RESET] Theme added to ~/.zshrc"
-      echo -e "[$GREEN+$RESET] Theme located in : ~/.oh-my-zsh/themes/chibraax.zsh-theme"
-      break
-    elif [[ "$choice" -eq "2" ]]; then
-      sed -i 's/ZSH_THEME="[^"]*"/ZSH_THEME="chibraax2"/g' .zshrc
-      prompt2
-      echo -e "["$GREEN"+"$RESET"] Theme added to ~/.zshrc"
-      echo -e "["$GREEN"+"$RESET"] Theme located in : ~/.oh-my-zsh/themes/chibraax2.zsh-theme"
-      break
-    else
-      echo -e "Bad choice"
-      echo -e ""
-      continue
-    fi
-  fi
-done
-
-# .zshrc for plugins
-sed -i "s/plugins=(git)/plugins=(git zsh-autosuggestions zsh-syntax-highlighting zsh-completions fzf)/g" .zshrc
+# Copy theme files
+cp "$SCRIPT_DIR"/chibraax*.zsh-theme "$HOME"/.oh-my-zsh/themes/
 
 # Alias for LSD,BATCAT
 echo -e "# Custom alias made by script" >>~/.zshrc
 test -f "/usr/bin/lsd" && echo -e "alias ls=/usr/bin/lsd" >>~/.zshrc
 test -f "/usr/bin/bat" && echo -e "alias cat=/usr/bin/bat" >>~/.zshrc
 test -f "/usr/bin/batcat" && echo -e "alias cat=/usr/bin/batcat" >>~/.zshrc
+# .zshrc for plugins
+sed -i "s/plugins=(git)/plugins=(git zsh-autosuggestions zsh-syntax-highlighting zsh-completions fzf)/g" .zshrc
+# .zshrc for theme
+sed -i "s/^ZSH_THEME=.*/ZSH_THEME="chibraax2"/g" "$HOME"/.zshrc
 
+# Warn the user
+echo -e "[$GREEN+$RESET] Theme added to ~/.zshrc"
+echo -e "[$GREEN+$RESET] Theme located in : ~/.oh-my-zsh/themes/"
 # Warn the user
 echo -e "\n["$RED"*"$RESET"] NB: Now your 'ls' command will execute LSD, if you want change this uncomment the alias inside your .zshrc"
 echo -e "["$RED"*"$RESET"] NB: Now your 'cat' command will execute BATCAT, if you want change this uncomment the alias inside your .zshrc\n"
