@@ -7,6 +7,11 @@ RESET="\033[0;0m"
 ALL_PLUGINS=(zsh-completions zsh-syntax-highlighting zsh-autosuggestions)
 PACKAGES=("git curl zsh wget fzf lsd bat")
 SCRIPT_DIR=$(pwd)
+
+# Links config oh-my-zsh
+CONFIG_1="https://raw.githubusercontent.com/Chibraax/make_my_shell/refs/heads/main/chibraax1.zsh-theme"
+CONFIG_2="https://raw.githubusercontent.com/Chibraax/make_my_shell/refs/heads/main/chibraax2.zsh-theme"
+
 # Check sudo
 test -f "/usr/bin/sudo" || eval " echo -e "[-] sudo not installed ! log as root and install it !" && exit 1"
 
@@ -98,7 +103,8 @@ for plugin in ${ALL_PLUGINS[@]}; do
 done
 
 # Copy theme files
-cp "$SCRIPT_DIR"/chibraax*.zsh-theme "$HOME"/.oh-my-zsh/themes/
+curl -sSL $CONFIG_1 >/home/admin/.oh-my-zsh/themes/chibraax1.zsh-theme
+curl -sSL $CONFIG_2 >/home/admin/.oh-my-zsh/themes/chibraax2.zsh-theme
 
 # Alias for LSD,BATCAT
 echo -e "# Custom alias made by script" >>~/.zshrc
