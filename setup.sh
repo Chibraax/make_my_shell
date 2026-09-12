@@ -114,7 +114,7 @@ test -f "/usr/bin/batcat" && echo -e "alias cat=/usr/bin/batcat" >>~/.zshrc
 # .zshrc for plugins
 sed -i "s/plugins=(git)/plugins=(git zsh-autosuggestions zsh-syntax-highlighting zsh-completions fzf)/g" .zshrc
 # .zshrc for theme
-sed -i "s/^ZSH_THEME=.*/ZSH_THEME="chibraax2"/g" "$HOME"/.zshrc
+sed -i "s/^ZSH_THEME=.*/ZSH_THEME="chibraax1"/g" "$HOME"/.zshrc
 
 # Warn the user
 echo -e "[$GREEN+$RESET] Theme added to ~/.zshrc"
