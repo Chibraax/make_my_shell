@@ -1,19 +1,13 @@
 # Auto Shell/Prompt config
 This script install and configure zsh shell and oh_my_zsh plugins, plus other stuff like `lsd` in order to have a nice and enjoyable prompt and shell experience.
 
-[*] Make sure to have `sudo`.
+*Make sure to have `sudo`*
 
-Works on `Debian` like | `Arch` like | `RedHat` like.
+Works on `Debian` like | `Arch` like | `RHEL` like.
 
 # How to install ? 
 
-```git clone https://github.com/Chibraax/auto_zsh```
-
-```cd auto_zsh```
-
-```chmod +x setup.sh```
-
-```./setup.sh```
+ ```curl https://raw.githubusercontent.com/Chibraax/make_my_shell/refs/heads/main/setup.sh | bash```
 
 # Before (classic BASH):
 
@@ -33,3 +27,4 @@ Works on `Debian` like | `Arch` like | `RedHat` like.
   `zsh-history-substring-search`: This is a clean-room implementation of the Fish shell's history search feature, where you can type in any part of any command from history and then press chosen keys, such as the UP and DOWN arrows, to cycle through matches.
 
   `lsd`: exactly like `ls` command but with beautiful syntax colors.
+
