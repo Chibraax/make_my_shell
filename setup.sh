@@ -103,8 +103,8 @@ for plugin in ${ALL_PLUGINS[@]}; do
 done
 
 # Copy theme files
-curl -sSL $CONFIG_1 >/home/admin/.oh-my-zsh/themes/chibraax1.zsh-theme
-curl -sSL $CONFIG_2 >/home/admin/.oh-my-zsh/themes/chibraax2.zsh-theme
+curl -sSL $CONFIG_1 >/home/$USER/.oh-my-zsh/themes/chibraax1.zsh-theme
+curl -sSL $CONFIG_2 >/home/$USER/.oh-my-zsh/themes/chibraax2.zsh-theme
 
 # Alias for LSD,BATCAT
 echo -e "# Custom alias made by script" >>~/.zshrc
