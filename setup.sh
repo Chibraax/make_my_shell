@@ -21,7 +21,7 @@ grep -iq "redhat" /etc/os-release && echo -e "["$GREEN"+"$RESET"] RedHat like OS
 USER_DISTRO="RED_HAT"
 
 # Debian
-test -f "/usr/bin/dnf" || test -f "/usr/bin/apt-get" && USER_DISTRO=DEBIAN
+test -f "/usr/bin/apt" || test -f "/usr/bin/apt-get" && USER_DISTRO=DEBIAN
 grep -iq "debian" /etc/os-release && echo -e "["$GREEN"+"$RESET"] Debian like OS\n" && USER_DISTRO="DEBIAN"
 
 # Arch
